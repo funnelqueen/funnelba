@@ -1,0 +1,169 @@
+<script>
+    // DO NOT EDIT //
+    window.cfpt = window.cfpt || {};
+    window.cfpt.unlockCode = window.cfpt.unlockCode || {};
+    // END DO NOT EDIT //
+    // CONFIGURATION SECTION //
+    //Apply button text for translations
+    window.cfpt.unlockCode.applyButtonText = "Unlock";
+    //configure with your product IDs and codes
+    window.cfpt.unlockCode.codes = [
+        {
+            'codes': ['YOURCODE'],
+            'description': 'Welcome You!'
+        },
+        {
+            'codes': ['ANOTHERCODE'],
+            'description': 'Welcome Super Special Person!'
+        }
+    ];
+    // END CONFIGURATION SECTION //
+</script>
+
+<script>
+    /**************************
+    * Copyright 2018 CF Pro Tools, All Rights Reserved
+    * Do not share, or distribute this code without author's consent.
+    * This copyright notice must remain in place whenever using
+    * this code - DO NOT REMOVE
+    * Author: Jaime Smith
+    * Website: https://cfprotools.com
+    **************************/
+    window.cfpt = window.cfpt || {};
+    window.cfpt.unlockCode = window.cfpt.unlockCode || {};
+    var codes = window.cfpt.unlockCode.codes || [];
+    var applyButtonText = window.cfpt.unlockCode.applyButtonText || "Unlock";
+    var passedSecret = getURLParameter('code');
+    $('.closeLPModal').hide();
+    $('.modalBackdropWrapper').on('click', function (ev) {
+        ev.preventDefault();
+        ev.stopPropagation();
+        return false;
+    })
+    var secretCodes = [];
+    $.each(codes, function(index, value) {
+        var currCodes = value.codes;
+        if (currCodes) {
+            secretCodes = secretCodes.concat(currCodes);
+        }
+    });
+    //convert codes to upper
+    secretCodes = secretCodes.map(function(x) {
+        return x.toUpperCase();
+    });
+    $(function() {
+        var applyButton = $('<span/>', {
+            'class': 'input-group-addon cf-secret-apply',
+            text: applyButtonText
+        });
+        $('[data-title*="cf-secret-input"] input').wrap('<div class="input-group"></div>');
+        $('[data-title*="cf-secret-input"] .input-group').append(applyButton);
+        $('[data-title*="cf-secret-input"]').append($('<div/>', {
+            'class': 'cf-secret-status form-control-feedback elAlign_right',
+            text: ''
+        }));
+        if (passedSecret && passedSecret !== 'null') {
+            $('[data-title*="cf-secret-input"] input').val(passedSecret);
+            $('[data-title*="cf-secret-input"] input').garlic('onRetrieve', function() {
+                return false;
+            });
+            cfCheckSecretCode();
+        }
+        $('[data-title*="cf-secret-input"] input').on('keypress', function(e) {
+            if (e.which == 13) {
+                if ($(this).val()) {
+                    cfCheckSecretCode();
+                }
+            }
+        });
+        $('[data-title*="cf-secret-input"] input').on('blur', function(e) {
+            if ($(this).val()) {
+                cfCheckSecretCode();
+            }
+        });
+        $('.cf-secret-apply').on('click', function(ev) {
+            $('[data-title*="cf-secret-input"] input').blur();
+        });
+    });
+    function cfCheckSecretCode() {
+        var applied = false;
+        var description = '';
+        var secretEntered = $('[data-title="cf-secret-input"] input').val().toUpperCase();
+        var secretInputName = $('[data-title="cf-secret-input"] input').attr('data-custom-type');
+        var cfARsecretField = $('#cfAR input[name="' + secretInputName + '"]').first();
+        if (cfARsecretField.length > 0) {
+            cfARsecretField.val(secretEntered);
+        } else {
+            $('#cfAR').append($('<input>', {
+                type: 'text',
+                name: secretInputName,
+                value: secretEntered
+            }));
+        }
+        if ($.inArray(secretEntered, secretCodes) > -1) {
+            //find the obj that contains the code
+            var secret = {};
+            var expires = null;
+            var affiliate_id = null;
+            var selectAfter = null;
+            $.each(codes, function(index, value) {
+                var currCodes = value.codes;
+                currCodes = currCodes.map(function(x) {
+                    return x.toUpperCase();
+                });
+                if (currCodes.indexOf(secretEntered) > -1) {
+                    description = value.description;
+                    selectAfter = value.selectAfter;
+                    if (value.expires) {
+                        expires = moment(value.expires);
+                    }
+                    if (value.affiliate_id) {
+                      affiliate_id = value.affiliate_id;
+                    }
+                    return false;
+                }
+            });
+            var expired = (expires && expires.isBefore(moment())) ? true : false;
+            if (!expired) {
+                if (affiliate_id) {
+                    $('#cfAR input[name="contact[affiliate_id]"]').val(affiliate_id);
+                    $('#cfAR input[name="contact[aff_sub]"]').val('secret');
+                    $('#cfAR input[name="contact[aff_sub2]"]').val(secretEntered);
+                }
+                applied = true;
+            }
+        } else {
+            applied = false;
+        }
+        if (applied) {
+            var appliedText = 'Code Applied';
+            if (description) {
+                appliedText = description;
+            }
+            $('[data-title*="cf-secret-input"]').removeClass('has-warning').addClass('has-success').find('.cf-secret-status').html(appliedText);
+            $('[data-title="cf-secret-input"] input').attr('placeholder', 'Code Applied: ' + secretEntered).val('');
+            setTimeout(function () {
+                $('.closeLPModal').click();
+            }, 2000);
+        } else {
+            var warnString = (expired) ? 'Code Expired!' : 'No Such Code!';
+            $('[data-title*="cf-secret-input"]').removeClass('has-success').addClass('has-warning').find('.cf-secret-status').html(warnString);
+            $('[data-title="cf-secret-input"] input').attr('placeholder', warnString).val('');
+        }
+        return applied;
+    }
+</script>
+
+<style>
+    .cf-secret-apply:hover {
+        cursor: pointer;
+    }
+    [data-title*="cf-secret-input"] input.elInput {
+        border-top-right-radius: 0 !important;
+        border-bottom-right-radius: 0 !important;
+        border: 1px solid rgba(0, 0, 0, 0.2) !important;
+    }
+    span.cf-secret-apply {
+        display: table-cell !important;
+    }
+</style>
