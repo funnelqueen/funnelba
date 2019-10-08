@@ -15,3 +15,31 @@ $(function () {
   }
 });
 </script>
+
+
+<script>
+/**************************
+* Copyright 2018 CF Pro Tools, All Rights Reserved
+* Do not share, or distribute this code without author's consent.
+* This copyright notice must remain in place whenever using
+* this code - DO NOT REMOVE
+* Author: Jaime Smith
+* Website: https://cfprotools.com
+**************************/
+$(function () {
+  var deepLesson = localStorage.getItem('cfma_deep_link');
+  var hash = window.location.hash;
+  if (deepLesson || (hash && hash.indexOf('#lesson') > -1)) {
+    var lessonId = '';
+    if (deepLesson) {
+      lessonId = deepLesson;
+    } else {
+      lessonId = hash.replace('#lesson', '');
+    }
+    setTimeout(function () {
+      $('a.lesson-link[id="'+lessonId+'"]').click();
+      localStorage.removeItem('cfma_deep_link');
+    }, '1000');
+  }
+});
+</script>
