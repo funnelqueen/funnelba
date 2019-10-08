@@ -1,0 +1,26 @@
+<script>
+/**************************
+* Copyright 2018 CF Pro Tools, All Rights Reserved
+* Do not share, or distribute this code without author's consent.
+* This copyright notice must remain in place whenever using
+* this code - DO NOT REMOVE
+* Author: Jaime Smith
+* Website: https://cfprotools.com
+**************************/
+$(function(){
+	$('<input type="checkbox" name="same_as_shipping" style="margin-right: .5em;">').prependTo('[data-title="cf-same-billing"] .elHeadline');
+	$("input[name='same_as_shipping']").on("click",function() {
+		if($(this).is(":checked")) {
+			$("input[name^='shipping_']").each(function(i,v){
+				$("input[name='"+$(v).attr("name").split("_")[1]+"']").val($(v).val());
+			});
+			$("select[name='country']").val($("select[name='shipping_country']").val());
+			$("select[name='state']").val($("select[name='shipping_state']").val());
+		} else {
+			$("input[name^='shipping_']").each(function(i,v){
+				$("input[name='"+$(v).attr("name").split("_")[1]+"']").val("");
+			});
+		}
+	});
+});
+</script>
