@@ -1,0 +1,77 @@
+<script>
+/**************************
+* Copyright 2018 CF Pro Tools, All Rights Reserved
+* Do not share, or distribute this code without author's consent.
+* This copyright notice must remain in place whenever using
+* this code - DO NOT REMOVE
+* Author: Jaime Smith
+* Website: https://cfprotools.com
+**************************/
+$(function () {
+  window.cfptCurrency = 'USD'; //set to whatever currency you process in
+  // set total on button click for OTO pages
+  $('[data-title*="cf-oto-cents-"]').on('click', function () {
+    var titleParts = $(this).attr('data-title').split(' ');
+    var total = null;
+    $.each(titleParts, function (index, value) {
+      if (value.indexOf('cf-oto-cents-') > -1) {
+        total = value.split('-').pop();
+        total = parseInt(total) / 100;
+        return false; //break out of the loop
+      }
+    });
+    if (!isNaN(total)) {
+      window.cfptOrderTotal = total;
+      setLastTransLocalStorage();
+    }
+  });
+  function setLastTransLocalStorage() {
+    localStorage.setItem('cfptLastTransAmt', window.cfptOrderTotal);
+    localStorage.setItem('cfptLastTransPath', document.location.pathname);
+  }
+  // set localStorage vals on cfAR form submit
+  $('[href="#submit-form"], [href="#submit-form-2step-order"], [href*="#yes-link"]').on('click', function () {
+    if (window.cfptOrderTotal) {
+      setLastTransLocalStorage();
+    }
+  });
+  $('#cfAR').on('submit', function () {
+      if (window.cfptOrderTotal) {
+        setLastTransLocalStorage();
+      }
+  });
+  // handle grabbing totals from last trans and fire events
+  var cfptLastTransAmt = localStorage.getItem('cfptLastTransAmt');
+  var cfptLastTransPath = localStorage.getItem('cfptLastTransPath');
+  var cfptCurrPagePath = document.location.pathname;
+  // if the last path and the current path match
+  // this is a page reload, which would be a failure
+  // so remove the items to start fresh
+  if (cfptLastTransPath && cfptLastTransPath == cfptCurrPagePath) {
+    cfptLastTransAmt = null;
+    cfptLastTransPath = null;
+    clearLastTransLocalStorage();
+  }
+  // if we have an amount and we can convert that amount to a float
+  // store that float into the last transAmt var
+  if (cfptLastTransAmt) {
+    cfptLastTransAmt = parseFloat(cfptLastTransAmt);
+    if (!isNaN(cfptLastTransAmt)) {
+      firePurchaseEvents(cfptLastTransAmt);
+    }
+  }
+  function firePurchaseEvents(amt) {
+    if (typeof fbq != 'undefined') {
+      fireFBPurchaseEvent(amt);
+    }
+    clearLastTransLocalStorage();
+  }
+  function fireFBPurchaseEvent(amt) {
+    fbq('track', 'Purchase', {value: amt, currency: window.cfptCurrency});
+  }
+  function clearLastTransLocalStorage() {
+    localStorage.removeItem('cfptLastTransAmt');
+    localStorage.removeItem('cfptLastTransPath');
+  }
+});
+</script>
