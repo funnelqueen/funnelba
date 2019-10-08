@@ -1,0 +1,22 @@
+<script>
+/**************************
+* Copyright 2018 CF Pro Tools, All Rights Reserved
+* Do not share, or distribute this code without author's consent.
+* This copyright notice must remain in place whenever using
+* this code - DO NOT REMOVE
+* Author: Jaime Smith
+* Website: https://cfprotools.com
+**************************/
+$(function () {
+  $('[data-title*=cf-bump-image-]').each(function () {
+    var titleParts = $(this).attr('data-title').split(' ');
+    var id = 'foobar'; //defaut that shouldn't exist
+    $.each(titleParts, function (index, value) {
+      if (value.indexOf('cf-bump-image-') != -1) {
+        id = value.split('-').pop();
+      }
+    });
+    $('[data-title*="cf-multi-bump-'+id+'"] .otoText2').append($('[data-title*="cf-bump-image-'+id+'"]').show());
+  });
+});
+</script>
