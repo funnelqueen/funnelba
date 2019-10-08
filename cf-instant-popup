@@ -1,0 +1,17 @@
+<script>
+/**************************
+* Copyright 2018 CF Pro Tools, All Rights Reserved
+* Do not share, or distribute this code without author's consent.
+* This copyright notice must remain in place whenever using
+* this code - DO NOT REMOVE
+* Author: Jaime Smith
+* Website: https://cfprotools.com
+**************************/
+$(function () {
+  var delaySeconds = 0; //how long to wait after page load
+  $('body').append('<a id="cfptPopClicker" href="#open-popup" style="display: none;"></a>');
+  setTimeout(function () {
+    $('#cfptPopClicker').click();
+  }, delaySeconds * 1000);
+});
+</script>
