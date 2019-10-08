@@ -1,0 +1,18 @@
+<script>
+/**************************
+* Copyright 2018 CF Pro Tools, All Rights Reserved
+* Do not share, or distribute this code without author's consent.
+* This copyright notice must remain in place whenever using
+* this code - DO NOT REMOVE
+* Author: Jaime Smith
+* Website: https://cfprotools.com
+**************************/
+$(function () {
+  var widgetId = $('.mcwidget-checkbox').attr('data-widget-id');
+  $('[href="#submit-form"]').on('click', function (ev) {
+    if (typeof MC !== "undefined" && widgetId && widgetId.length) {
+      MC.getWidget(widgetId).submit();
+    }
+  });
+});
+</script>
