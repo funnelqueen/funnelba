@@ -1,0 +1,62 @@
+<script>
+/**************************
+* Copyright 2018 CF Pro Tools, All Rights Reserved
+* Do not share, or distribute this code without author's consent.
+* This copyright notice must remain in place whenever using
+* this code - DO NOT REMOVE
+* Author: Jaime Smith
+* Website: https://cfprotools.com
+**************************/
+$(function () {
+	if ($('[data-de-type="order2step"], [data-de-type="order2stepi"]').length) {
+        $('.elOrderProductOptions').last().before($('[data-title*="cf-multi-bump-"]').show());
+	}
+});
+</script>
+
+<script>
+/**************************
+* Copyright 2018 CF Pro Tools, All Rights Reserved
+* Do not share, or distribute this code without author's consent.
+* This copyright notice must remain in place whenever using
+* this code - DO NOT REMOVE
+* Author: Jaime Smith
+* Website: https://cfprotools.com
+**************************/
+$(function () {
+    $('[data-title*="cf-multi-bump-"]').each(function () {
+        var titleParts = $(this).attr('data-title').split(' ');
+        var bumpId = ''; //titleParts[titleParts.length - 1];
+        $.each(titleParts, function (index, value) {
+            if (value.indexOf('cf-multi-bump-') !== -1) {
+                var idParts = value.split('-');
+                bumpId = idParts[idParts.length - 1];
+            }
+        });
+        $(this).find('[id="bump-offer"]').off();
+        $(this).find('[name="purchase[product_ids][]"]').val(bumpId).attr('id','bump_offer_'+bumpId);
+    });
+});
+</script>
+
+<script>
+/**************************
+* Copyright 2018 CF Pro Tools, All Rights Reserved
+* Do not share, or distribute this code without author's consent.
+* This copyright notice must remain in place whenever using
+* this code - DO NOT REMOVE
+* Author: Jaime Smith
+* Website: https://cfprotools.com
+**************************/
+$(function () {
+	$('.orderFormBump input[type="checkbox"][name="purchase[product_ids][]"]').on('change', function () {
+		var checked = $(this).is(':checked');
+		var id = $(this).val();
+		$('#cfAR input[name="purchase[product_ids][]"][value="'+id+'"]').attr("checked", checked);
+		rebuildOrderSummary();
+	});
+	$('[href="#submit-form-2step"]').on('click', function () {
+		rebuildOrderSummary();
+	});
+});
+</script>
