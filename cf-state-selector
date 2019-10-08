@@ -1,0 +1,18 @@
+
+<script>
+/**************************
+* Copyright 2018 CF Pro Tools, All Rights Reserved
+* Do not share, or distribute this code without author's consent.
+* This copyright notice must remain in place whenever using
+* this code - DO NOT REMOVE
+* Author: Jaime Smith
+* Website: https://cfprotools.com
+**************************/
+$(function () {     
+    $('[name="shipping_state"], [name="state"]').each(function () {
+      var $stateSelector = $('<select/>', { name: this.name, class: $(this).attr("class"), style: $(this).attr("style"), "data-type": "extra" });
+      $stateSelector.append('<option value="">Select State</option>', $('#cfx_all_states').html());      
+      $(this).replaceWith($stateSelector);
+    });
+});
+</script>
