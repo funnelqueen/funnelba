@@ -1,0 +1,77 @@
+<script>
+/**************************
+* Copyright 2018 CF Pro Tools, All Rights Reserved
+* Do not share, or distribute this code without author's consent.
+* This copyright notice must remain in place whenever using
+* this code - DO NOT REMOVE
+* Author: Jaime Smith
+* Website: https://cfprotools.com
+**************************/
+$(function () {
+	var domesticCountries = ['united states','united states of america'];
+	var hideProds = ['964313','964314','964317','964322']; //these products will not show in the product selector
+	var domesticGroups = [
+		['964308','964313'],
+		['964309','964314']
+	];
+	var intlGroups = [
+		['964308','964317'],
+		['964309','964322']
+	];
+	//default to domestic groups
+	var prodGroups = domesticGroups;
+	if ($('.o2step_wrapper').length > 0) {
+		$('.o2step_step2 .elOrderProductOptions').first().attr('data-de-type','orpo');
+	}
+	$('[name="shipping_country"], [name="country"]').on('change input', function () {
+		setProdGroups();
+	});
+  $('[data-de-type="orpo"] [name="purchase[product_id]"]').on('change', function () {
+    setProdGroups();
+  });
+	if (typeof rebuildOrderSummary !== 'undefined' && $.isFunction(rebuildOrderSummary)) {
+		$('[data-de-type="ors"]').attr('data-title','cf-order-summary');
+	}
+	$.each(hideProds, function (index, value) {
+		$('[data-de-type="orpo"] [value="'+value+'"][name="purchase[product_id]"]').parents('[data-cf-product-template="true"]').hide();
+	});
+	function addProducts() {
+		$('#cfAR [name="purchase[product_ids][]"]').attr('checked',false);
+		var cfptSelectedProd = $('[data-de-type="orpo"] [name="purchase[product_id]"]:checked').val();
+		$('#bump-offer, [id*="bump_offer_"]').each(function () {
+			var bumpId = $(this).val();
+			if ($(this).is(':checked')) {
+				$('#cfAR [name="purchase[product_ids][]"][value="'+bumpId+'"]').attr('checked', true);
+			} else {
+				$('#cfAR [name="purchase[product_ids][]"][value="'+bumpId+'"]').attr('checked', false);
+			}
+		});
+		$.each(prodGroups, function (idx, arr) {
+			if ($.inArray(cfptSelectedProd, arr) >= 0) {
+				$.each(arr, function (iidx, value) {
+					$('#cfAR [name="purchase[product_ids][]"][value="'+value+'"]').attr('checked',true);
+				});
+			}
+		});
+		if (typeof rebuildOrderSummary !== 'undefined' && $.isFunction(rebuildOrderSummary)) {
+			rebuildOrderSummary();
+		}
+	}
+	$('[data-de-type="orpo"] [name="purchase[product_id]"]').first().trigger("click").trigger("change");
+	setProdGroups();
+	function setProdGroups() {
+		var selCountry = $('[name="shipping_country"] :selected').val() || $('[name="country"] :selected').val();
+		if (!selCountry || selCountry.length == 0) {
+			selCountry = localStorage.getItem("garlic:"+document.location.host+"*>select.shipping_country") || localStorage.getItem("garlic:"+document.location.host+"*>select.country");
+		}
+		if (selCountry && $.inArray(selCountry.toLowerCase(), domesticCountries) === -1) {
+			//set the prodGroups to international shipping
+			prodGroups = intlGroups;
+		} else {
+			prodGroups = domesticGroups;
+		}
+		addProducts();
+	}
+	$('[data-de-type="orpo"]').show();
+});
+</script>
