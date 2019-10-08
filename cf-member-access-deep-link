@@ -1,0 +1,17 @@
+<script>
+/**************************
+* Copyright 2018 CF Pro Tools, All Rights Reserved
+* Do not share, or distribute this code without author's consent.
+* This copyright notice must remain in place whenever using
+* this code - DO NOT REMOVE
+* Author: Jaime Smith
+* Website: https://cfprotools.com
+**************************/
+$(function () {
+  var hash = window.location.hash;
+  if (hash && hash.indexOf('#lesson') > -1) {
+    var deepLesson = hash.replace("#lesson","");
+    localStorage.setItem('cfma_deep_link',deepLesson);
+  }
+});
+</script>
