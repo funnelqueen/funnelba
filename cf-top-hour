@@ -1,0 +1,39 @@
+<script src="https://cdn.jsdelivr.net/handlebarsjs/4.0.5/handlebars.min.js"></script>
+<script>
+/*
+* Copyright 2016 CF Pro Tools, All Rights Reserved
+* Do not share, or distribute this code without author's consent.
+* Author: Jaime Smith
+* Website: https://cfprotools.com	
+*/
+$(function() {
+	var wt_regex = new RegExp("\\{\\{webinar_time\\}\\}","g");
+	var wt_formatted = moment().add(1, 'hour').startOf('hour').format('h:mm A');
+	var $source = $('[data-title="cftoh-time"]').html();
+	var template = Handlebars.compile($source);
+	var data = {
+	"webinar_time": wt_formatted
+	}
+	var html = template(data);
+	$('[data-title="cftoh-time"]').html(html);
+	$.countdown.setDefaults($.countdown.regionalOptions["eng"]);
+	var newClasses = $('[data-title="cftoh-countdown"] div').first().attr("class");
+	var currClasses = $('[data-title="cftoh-countdown"]').attr("class");
+	top_hour_time = moment().add(1, 'hour').startOf('hour').unix();
+	time_now = moment().unix();
+	time_now_diff_seconds = top_hour_time - time_now;
+	$('[data-title="cftoh-countdown"]').countdown({
+	    until: time_now_diff_seconds,
+	    padZeroes: true,
+	 }).attr("class",newClasses).wrap('<div class="'+currClasses+'"></div>');
+	setWebinarTime();
+	// set value of webinar
+	$('[href="#submit-form"]').on('click', function() {
+	  setWebinarTime();
+	});
+	function setWebinarTime() {
+		$webinar_dt = moment().add(1, 'hour').startOf('hour');
+	  $("#webinar_delay").val($webinar_dt.diff(moment()));
+	}
+});
+</script>
