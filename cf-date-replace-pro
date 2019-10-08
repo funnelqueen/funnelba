@@ -1,0 +1,43 @@
+<script src="https://cdn.jsdelivr.net/handlebarsjs/4.0.5/handlebars.min.js"></script>
+<script>
+/**************************
+* Copyright 2018 CF Pro Tools, All Rights Reserved
+* Do not share, or distribute this code without author's consent.
+* This copyright notice must remain in place whenever using
+* this code - DO NOT REMOVE
+* Author: Jaime Smith
+* Website: https://cfprotools.com
+**************************/
+$(function () {
+	$('[data-title*="cf-date-replace"]').each(function () {
+		var $mom = moment();
+		var $source = $(this).html();
+		var template = Handlebars.compile($source);
+		var data = {
+			"MMM": $mom.format('MMM'), // Jan, Feb, Mar
+			"MMMM": $mom.format('MMMM'), // January, February
+			"M": $mom.format('M'), // 1, 2, 12
+			"YYYY": $mom.format('YYYY'), // 1970, 1974, 2017
+			"YY": $mom.format('YY'), // 70, 74, 17
+			"ddd": $mom.format('ddd'), // Sun, Mon
+			"dddd": $mom.format('dddd'), // Sunday, Monday
+			"D": $mom.format('D'), // 1, 2, 31
+			"DD": $mom.format('DD'), // 01, 02, 31
+			"Do": $mom.format('Do'), // 1st, 2nd, etc
+			"LT": $mom.format('LT'), // 8:30 PM
+			"LTS": $mom.format('LTS'), // 8:30:25 PM
+			"L": $mom.format('L'), // 12/31/2017
+			"l": $mom.format('l'), // 9/4/2017
+			"LL": $mom.format('LL'), // September 4 2017
+			"ll": $mom.format('ll'), // Sep 4 2017
+			"LLL": $mom.format('LLL'), // September 4 2017 8:30 PM
+			"lll": $mom.format('lll'), // Sep 4 2017 8:30 PM
+			"LLLL": $mom.format('LLLL'), // Thursday, September 4 2107 8:30 PM
+			"llll": $mom.format('llll'), // Thu, Sep 4 2017 8:30 PM
+			"long-date": $mom.format('dddd, MMMM D, YYYY') //Thurdsay March 6, 2017
+		}
+		$(this).html(template(data));
+		$(this).show();
+	});
+});
+</script>
