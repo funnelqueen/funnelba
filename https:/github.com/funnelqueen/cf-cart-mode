@@ -1,0 +1,89 @@
+<script>
+/**************************
+* Copyright 2018 CF Pro Tools, All Rights Reserved
+* Do not share, or distribute this code without author's consent.
+* This copyright notice must remain in place whenever using
+* this code - DO NOT REMOVE
+* Author: Jaime Smith
+* Website: https://cfprotools.com
+**************************/
+$(function () {
+	// OPTIONAL SETUP //
+	var startStopMap = { //TODO: setup different start/stop for each product (optional)
+		"123456": { // YOUR PRODUCT ID
+			"start": 1, // options will always have 0 and then whatever the start number is
+			"stop": 5 // the options will stop with this number.  be reasonable. too large will cause errors.
+		},
+		"654321": { // YOUR NEXT PRODUCT ID
+			"start": 5, // options will always have 0 and then whatever the start number is
+			"stop": 10 // the options will stop with this number.  be reasonable. too large will cause errors.
+		}
+	};
+	// END OPTIONAL SETUP //
+	var start = 0; //the quantity to start with, should normally be zero
+	var stop = 5; //the quantity to end with, should be the max quantity you would want to sell at once, 5 is a good start
+	$('[data-de-type="orpo"] .elOrderProductOptinLabel .elOrderProductOptinItem, .elOrderProductOptions .elOrderProductOptinLabel .elOrderProductOptinItem').first().before('<div class="pull-left qty-head">Qty</div>');
+	$('[data-de-type="orpo"] .elOrderProductOptinProducts:not(".hide") [name="purchase[product_id]"], .elOrderProductOptions .elOrderProductOptinProducts:not(".hide") [name="purchase[product_id]"]').each(function () {
+		var id = $(this).id;
+		var val = $(this).val();
+		var $selector = $(this).after(
+			$('<select/>', {
+				id: val+"_qty",
+				name: val+"_qty",
+				class: "qty_select",
+				"data-product-id":val
+			})
+		);
+		var startStop = startStopMap[val];
+		if (startStop) {
+	  		$('#'+val+"_qty").append($('<option></option>',{value: 0,text: 0}));
+	  		for (i = startStop.start; i <= startStop.stop; i++) {
+	    		$('#'+val+"_qty").append($('<option></option>',{value: i,text: i}));
+	  		}
+		} else {
+	  		for (i = start; i <= stop; i++) {
+	  			$('#'+val+"_qty").append($('<option></option>',{value: i,text: i}));
+	  		}
+	  	}
+		$(this).attr("checked",false).addClass("hide");
+	});
+	$('select.qty_select, #bump-offer').on("change", function () {
+		updateCartQuantities();
+	});
+	//default to no products selected
+	$('[name="purchase[product_ids][]"]:checked').attr("checked",false);
+	$('#cfAR input[name="purchase[product_id]"][type="radio"]').remove();
+	updateCartQuantities();
+	function updateCartQuantities() {
+		$('.qty_select').each(function () {
+			var $selector = $(this);
+			var qty = $selector.val();
+			var cartProd = $('<input/>',{type: "checkbox", name: "purchase[product_ids][]", "data-storage":false, checked: true});
+			var prodId = $selector.attr('id').split('_')[0];
+			$('[name="purchase[product_ids][]"][value="'+prodId+'"]:not(.elOrderProductOptinProducts.hide input)').remove();
+			cartProd = $(cartProd).val(prodId).attr("checked",true);
+			for (var i = 0; i < qty; i++) {
+				$('#cfAR').append($(cartProd).clone());
+			}
+		});
+        	$(document).trigger('cfpt:cart-updated');
+	}
+});
+</script>
+
+<style>
+[data-de-type="orpo"] .elOrderProductOptinLabel .elOrderProductOptinItem, .elOrderProductOptions .elOrderProductOptinLabel .elOrderProductOptinItem {
+	/* margin-left: 2em; */
+}
+.qty-head {
+	font-weight: bold;
+	width: 4em;
+}
+.qty_input {
+	width: 3em;
+}
+.qty_select {
+  transform: scale(1.1);
+  margin-right: 1em;
+}
+</style>
