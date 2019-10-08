@@ -1,0 +1,50 @@
+<script src="https://code.jquery.com/ui/1.11.4/jquery-ui.min.js"></script>
+<script>
+/**************************
+* Copyright 2018 CF Pro Tools, All Rights Reserved
+* Do not share, or distribute this code without author's consent.
+* This copyright notice must remain in place whenever using
+* this code - DO NOT REMOVE
+* Author: Jaime Smith
+* Website: https://cfprotools.com
+**************************/
+$(function () {
+  var checkerName = "accepted_terms"; //set your field name here
+  var termsCheckerTemplate = $('<input type="checkbox" name="custom_type" class="elInput" data-type="extra" data-custom-type="'+checkerName+'" value="false">');
+  $('[data-title*="cf-terms-checker"]').each(function () {
+    var termsChecker = termsCheckerTemplate.clone();
+    termsChecker.prependTo($(this).find('.elHeadline'));
+  });
+  if ($('.o2step_wrapper').length > 0) {
+		$('.order2stepbuttonOrder').before($('[data-title*="cf-terms-checker"]'));
+	}
+  $('[href="#submit-form"], [href="#submit-form-2step-order"], [href*="#yes-link"]').click(function (ev) {
+    var termsChecker = $('[data-title*="cf-terms-checker"] input[type="checkbox"]');
+    if (termsChecker.length && !termsChecker.is(':checked')) {
+      $(this).parents('[data-de-type="button"], .order2stepbuttonOrder, .elHeadline').effect('shake', {distance: 10});
+      $('[data-title*="cf-terms-checker"]').effect('highlight', {}, 2000);
+      ev.stopPropagation();
+      $('.otoloading').hide();
+      return false;
+    }
+  });
+  $('[data-title*="cf-terms-checker"] input[type="checkbox"]').on('change', function () {
+    if ($(this).is(':checked')) {
+      $(this).val('true');
+    } else {
+      $(this).val('false');
+    }
+  });
+});
+</script>
+
+<style>
+[data-title*="cf-terms-checker"] input[type="checkbox"] {
+  -webkit-appearance: checkbox !important;
+  -moz-appearance: checkbox !important;
+  appearance: checkbox !important;
+  margin-right: .5em;
+  height: 16px;
+  width: 16px;
+}
+</style>
