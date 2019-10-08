@@ -1,0 +1,40 @@
+<script>
+/**************************
+* Copyright 2018 CF Pro Tools, All Rights Reserved
+* Do not share, or distribute this code without author's consent.
+* This copyright notice must remain in place whenever using
+* this code - DO NOT REMOVE
+* Author: Jaime Smith
+* Website: https://cfprotools.com
+**************************/
+$(function () {
+	$('[name="purchase[product_id]"]').each(function () {
+		var id = $(this).attr('id');
+		var val = $(this).val();
+		$(this).replaceWith(
+			$('<input/>', {
+				id: id,
+				name: "purchase[product_id]",
+				type: "checkbox",
+				value: val
+			})
+		);
+	});
+    
+	$('#cfAR [name="purchase[product_ids][]"]').attr("checked", false);
+    
+    if (typeof rebuildOrderSummary !== "undefined") {
+        rebuildOrderSummary();
+    }
+    $('[name="purchase[product_id]"]').change(function () {
+		if (this.checked) {
+			$('[name="purchase[product_ids][]"][value="'+$(this).val()+'"]').attr("checked",true);
+		} else {
+			$('[name="purchase[product_ids][]"][value="'+$(this).val()+'"]').attr("checked",false);
+		}
+		if (typeof rebuildOrderSummary !== "undefined") {
+			rebuildOrderSummary();
+		}
+	});
+});
+</script>
