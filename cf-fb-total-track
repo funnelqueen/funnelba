@@ -1,0 +1,75 @@
+<script>
+var CFPT = {};
+CFPT.funnel_id = "3429366";
+CFPT.currency = "USD";
+CFPT.prodPrices = {
+	'776236': {
+		'name': 'Testing Product 1',
+		'price': 7.99,
+		'keyword': 'Testing Product 1'
+	},
+	'776238': {
+		'name': 'Testing Product 2',
+		'price': 19.99,
+		'keyword': '2'
+	},
+	'776239': {
+		'name': 'Testing Product 3',
+		'price': 19.99,
+		'keyword': '3'
+	}
+}
+</script>
+<script>
+/**************************
+* Copyright 2017 CF Pro Tools, All Rights Reserved
+* Do not share, or distribute this code without author's consent.
+* Author: Jaime Smith
+* Website: https://cfprotools.com
+**************************/
+$(function () {
+	var cfpt = {};
+	if (typeof(CFPT) !== 'undefined') {
+		cfpt = CFPT;
+	}
+	var prodPrices = cfpt.prodPrices || {};
+	var funnel_id = cfpt.funnel_id || "123456";
+	var currency = cfpt.currency || "USD";
+	var total = 0;
+  	var already_fired = localStorage.getItem(funnel_id+"fbq_purchase_fired");
+  	$('.cart-box .elOrderProductOptinProducts').each(function () {
+	  	var priceFound = false;
+		var prodName = $(this).find('[data-cf-product-name="true"]').html();
+		var currPrice = 0;
+		$.each(prodPrices, function(index, value) {
+			var keyword = value.keyword;
+			var exactMatch = (typeof value.exactMatch !== undefined) ? value.exactMatch : false;
+			if (exactMatch) {
+				if (prodName.toLowerCase() == keyword.toLowerCase()) {
+					currPrice = value.price;
+					priceFound = true;
+				}
+			} else {
+				if (prodName.toLowerCase().includes(keyword.toLowerCase())) {
+					currPrice = value.price;
+					priceFound = true;
+				}
+			}
+		});
+		if (!priceFound) {
+			//try to grab the price from the text of the current container
+			var scrapedPrice = Number($(this).find('[data-cf-product-price="true"]').text().replace(/[^0-9\.]+/g,""));
+			//if the price is a number than set the current price, otherwise leave current price 0
+			if (!isNaN(scrapedPrice)) {
+				currPrice = scrapedPrice;
+			}
+		}
+		total += currPrice;
+  	});
+	localStorage.setItem(funnel_id+"_cf_order_total",total.toFixed(2));
+  	if (already_fired == null || already_fired == undefined || already_fired != "true") {
+		fbq('track','Purchase',{value: total.toFixed(2), currency: currency});
+		localStorage.setItem(funnel_id+"fbq_purchase_fired","true");
+  	}
+});
+</script>
