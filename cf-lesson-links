@@ -1,0 +1,26 @@
+<script>
+/**************************
+* Copyright 2019 CF Pro Tools, All Rights Reserved
+* Do not share, or distribute this code without author's consent.
+* This copyright notice must remain in place whenever using
+* this code - DO NOT REMOVE
+* Author: Jaime Smith
+* Website: https://cfprotools.com
+* Add-on: CF Lesson Links
+* Version: 1.0
+**************************/
+$(function() {
+	$(document).on("click", 'a[href*="#lesson"]', function (ev) {
+		ev.preventDefault();
+		var lesson = $(this).attr("href").replace("#lesson","");
+		window.scrollTo(0,0);
+		$('a.lesson-link[id="'+lesson+'"]').trigger("click");
+	});
+	$(document).on("click", 'img[data-imagelink*="#lesson"]', function (ev) {
+		ev.preventDefault();
+		var lesson = $(this).attr("data-imagelink").replace("#lesson","");
+		window.scrollTo(0,0);
+		$('a.lesson-link[id="'+lesson+'"]').click();
+	});
+});
+</script>
