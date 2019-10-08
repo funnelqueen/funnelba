@@ -1,0 +1,33 @@
+<script>
+/**************************
+* Copyright 2018 CF Pro Tools, All Rights Reserved
+* Do not share, or distribute this code without author's consent.
+* This copyright notice must remain in place whenever using
+* this code - DO NOT REMOVE
+* Author: Jaime Smith
+* Website: https://cfprotools.com
+**************************/
+$(function () {
+  $('[href="#yes-link"]').off();
+  $('[data-title*="cf-prod-grp-"]').on('click', function () {
+    $('.otoloading').show();
+    setTimeout(function () {
+      $('.otoloading').hide();
+    }, 10000);
+    var titleParts = $(this).attr('data-title').split(' ');
+    $.each(titleParts, function (index, value) {
+      if (value.toLowerCase().indexOf('cf-prod-grp') != -1) {
+        var prods = value.replace('cf-prod-grp-','').split('-');
+        var $tmpClone = $('[data-cf-product-template="true"]').clone();
+        $tmpClone.find('input[name="purchase[product_id]"]').remove();
+    		$('[data-cf-product-template="true"]').remove();
+    		$.each(prods, function (index, value) {
+    			var $currProd = $tmpClone.clone();
+    			$currProd.find('[name="purchase[product_ids][]"]').val(value).attr('checked',true);
+    			$('#cfAR').append($currProd);
+    		});
+      }
+    });
+  });
+});
+</script>
