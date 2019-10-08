@@ -1,0 +1,26 @@
+<script>
+/**************************
+* Copyright 2018 CF Pro Tools, All Rights Reserved
+* Do not share, or distribute this code without author's consent.
+* This copyright notice must remain in place whenever using
+* this code - DO NOT REMOVE
+* Author: Jaime Smith
+* Website: https://cfprotools.com
+**************************/
+$(function () {
+	$('[data-title*="cf-one-click-"]').each(function () {
+		var titleParts = $(this).attr('data-title').split(' ');
+		var prodId = '';
+	  	var $link = $(this).find('a[href*="#yes-link"], [data-imagelink*="#yes-link"]').first();
+		$.each(titleParts, function (index, value) {
+			if (value.toLowerCase().indexOf('cf-one-click-') > -1) {
+				prodId = value.split('-').pop();
+			}
+		});
+	  	var currPurch = $link.data('purchase');
+	  	currPurch.product_id = prodId;
+	  	$link.data('purchase',currPurch);
+	});
+});
+</script>
+
