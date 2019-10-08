@@ -1,0 +1,25 @@
+<script>
+/**************************
+* Copyright 2018 CF Pro Tools, All Rights Reserved
+* Do not share, or distribute this code without author's consent.
+* This copyright notice must remain in place whenever using
+* this code - DO NOT REMOVE
+* Author: Jaime Smith
+* Website: https://cfprotools.com
+* Add-on: CF Show Only Products
+* Version: 1.1
+**************************/
+$(function () {
+	var showProds = ['123456','123457']; //TODO: replace with your product IDs.  Can be as many as you want or just one; the first item in this list will be selected by default
+	//hide all products
+	$('[data-de-type*="orpo"] input[name="purchase[product_id]"], .o2step_step2 input[name="purchase[product_id]"]').each(function () {
+		if (showProds.indexOf($(this).val()) > -1) {
+			$(this).parents('[data-cf-product-template="true"]').show();
+		} else {
+			$(this).parents('[data-cf-product-template="true"]').hide();
+		}
+	});
+	$('#pid-'+showProds[0]+':not(#cfAR input)').click();
+	$('[data-title*="cf-show-only"]').show();
+});
+</script>
