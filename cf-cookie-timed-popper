@@ -1,0 +1,34 @@
+<script>
+/**************************
+* Copyright 2018 CF Pro Tools, All Rights Reserved
+* Do not share, or distribute this code without author's consent.
+* This copyright notice must remain in place whenever using
+* this code - DO NOT REMOVE
+* Author: Jaime Smith
+* Website: https://cfprotools.com
+**************************/
+$(function () {
+	$('[data-title*="cf-cookie-timed-popper-"]').each(function () {
+		var titleParts = $(this).attr('data-title').split(' ');
+    var seconds = 0;
+		var elId = $(this).attr('id');
+		var $parentThis = $(this);
+    $.each(titleParts, function (index, value) {
+      if (value.indexOf('cf-cookie-timed-popper-') > -1) {
+        seconds = parseInt(value.split('-').pop());
+        return false; //break out of the loop
+      }
+    });
+		if ($.cookie("popper_show:"+elId) != undefined) {
+			// the cookie was found so show the button right away
+			$parentThis.show();
+		} else {
+			// the cookie was not found so keep the button hidden until delay is reached
+			setTimeout(function () {
+				$.cookie("popper_show:"+elId, "1", { expires: 30, path: '' });
+				$parentThis.show();
+			}, 1000 * seconds);
+		}
+	});
+});
+</script>
