@@ -1,0 +1,113 @@
+<script src="https://cdn.jsdelivr.net/handlebarsjs/4.0.5/handlebars.min.js"></script>
+<script>
+/**************************
+* Copyright 2017 CF Pro Tools, All Rights Reserved
+* Do not share, or distribute this code without author's consent.
+* Author: Jaime Smith
+* Website: https://cfprotools.com
+**************************/
+$(function() {
+    var $webinar_dt = moment().minute(15).seconds(0);
+	var minutes = moment().minutes();
+	console.log('minutes: '+minutes);
+	if (minutes >= 45) {
+		$webinar_dt = moment().add(1, 'hour').startOf('hour');
+	} else if (minutes >= 30) {
+    	$webinar_dt = moment().minute(45).seconds(0);
+	} else if (minutes >= 15) {
+    	$webinar_dt = moment().minute(30).seconds(0);
+	}
+	console.log($webinar_dt.format());
+	time_now_diff_seconds = $webinar_dt.diff(moment(), 'seconds');
+	wt_formatted = $webinar_dt.format('h:mm A');
+	$('[data-title*="cfe15-time"]').each(function () {
+		var $source = $(this).html();
+		var template = Handlebars.compile($source);
+		var data = {
+			"webinar_time": wt_formatted
+		}
+		var html = template(data);
+		$(this).html(html);
+	});
+	$.countdown.setDefaults($.countdown.regionalOptions["eng"]);
+	$('[data-title*="cfe15-countdown"]').each(function () {
+		var newClasses = $(this).find('div').first().attr("class");
+		var currClasses = $(this).attr("class");
+		$(this).countdown({
+		    until: time_now_diff_seconds,
+		    padZeroes: true,
+		    onExpiry: function () { window.location.reload(); }
+		 }).attr("class",newClasses).wrap('<div class="'+currClasses+'"></div>');
+	});
+	setWebinarTime();
+	// set value of webinar
+	$('[href="#submit-form"]').on('click', function(e) {
+	  setWebinarTime();
+	});
+	function setWebinarTime() {
+		now = moment();
+		now_offset = moment.unix(now);
+	  $("#webinar_delay").attr("value", $webinar_dt.diff(moment()));
+	}
+});
+</script>
+
+<style>
+.is-countdown {
+	display: inline-block !important;
+}
+</style>
+
+
+Copy the code below for cf-every-fifteen-webinar-ty.html and then paste 
+inside of the Tracking Codes > Footer Custom Tracking setting of your 
+ClickFunnels Auto Webinar Countdown page.
+
+
+<script src="https://cdn.jsdelivr.net/handlebarsjs/4.0.5/handlebars.min.js"></script>
+<script>
+/**************************
+* Copyright 2017 CF Pro Tools, All Rights Reserved
+* Do not share, or distribute this code without author's consent.
+* Author: Jaime Smith
+* Website: https://cfprotools.com
+**************************/
+$(function() {
+	var nexturl = $('[data-title*="next-url-link"] a').attr('href');
+	$webinar_dt = moment().minute(15).seconds(0);
+	var minutes = moment().minutes();
+	if (minutes >= 45) {
+	    $webinar_dt = moment().add(1, 'hour').startOf('hour');
+	} else if (minutes >= 30) {
+    	$webinar_dt = moment().minute(45).seconds(0);
+	} else if (minutes >= 15) {
+    	$webinar_dt = moment().minute(30).seconds(0);
+	}
+	wt_formatted = $webinar_dt.format('h:mm A');
+	$('[data-title*="cfe15-time"]').each(function () {
+		var $source = $(this).html();
+		var template = Handlebars.compile($source);
+		var data = {
+			"webinar_time": wt_formatted
+		}
+		var html = template(data);
+		$(this).html(html);
+	});
+	$.countdown.setDefaults($.countdown.regionalOptions["eng"]);
+	$('[data-title*="cfe15-countdown"]').each(function () {
+		var newClasses = $(this).find('div').first().attr('class');
+		var currClasses = $(this).attr('class');
+		$(this).countdown({
+		    until: $webinar_dt.toDate(),
+		    padZeroes: true,
+		    expiryUrl: nexturl
+		}).attr("class",newClasses).wrap('<div class="'+currClasses+'"></div>');
+	});
+});
+</script>
+
+<style>
+.is-countdown {
+	display: inline-block !important;
+}
+</style>
