@@ -1,0 +1,26 @@
+<script src="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.9.0/slick.min.js"></script>
+<script>
+$(function () {
+    $('[data-title*="cf-slick-slider"]').each(function () {
+        var containerClass = 'col-inner';
+        if ($(this).hasClass('container')) {
+            containerClass = 'containerInner';
+        }
+        $('.'+containerClass, this).slick({
+            autoplay: true,
+            dots: true,
+            infinite: true,
+            arrows: true,
+            autoplaySpeed: 3000
+        });
+    });
+});
+</script>
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.9.0/slick.min.css" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.9.0/slick-theme.min.css" />
+<style>
+.slick-slider .elAlign_center img {
+  margin: 0 auto;
+}
+</style>
