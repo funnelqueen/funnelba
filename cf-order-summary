@@ -1,0 +1,153 @@
+<script>
+// ** NOTE: THIS SECTION MUST BE INCLUDED, BUT DOES NOT ALWAYS
+// ** REQUIRE MODIFICATION
+// OPTIONAL CONFIGURATION //
+CFPT = {};
+CFPT.prodPrices = { //modify with your product IDs and prices
+	'1234567': 0, // key = product_id; value = true product price float
+	'7654321': 7.95
+};
+CFPT.freePriceDisplay = 'FREE'; //what to say for subtotal when price is $0.00
+CFPT.orderTotalLabel = 'Order Total:'; //what to say for Order Total at the bottom
+// END OPTIONAL CONFIGURATION //
+</script>
+<script>
+/**************************
+* Copyright 2017 CF Pro Tools, All Rights Reserved
+* Do not share, or distribute this code without author's consent.
+* Author: Jaime Smith
+* Website: https://cfprotools.com
+**************************/
+$(function () {
+	//set default value to kill bug in L&E JS
+	window.cfpe = window.cfpe || {};
+	window.cfpe.orderTotal = window.cfpe.orderTotal || 0;
+	window.cfptOrderTotal = null;
+	$('[data-de-type="ors"], .elOrderProductOptions:not(:has(input,select))').first().attr('data-title','cf-order-summary');
+	$('#bump-offer').off();
+	rebuildOrderSummary();
+	$(document).on("change", '.qty_select, .o2step_step2 [name="purchase[product_id]"], [data-de-type="orpo"] [name="purchase[product_id]"], #bump-offer', function (ev) {
+		$('#bump-offer, [id*="bump_offer_"]').each(function () {
+			var bumpId = $(this).val();
+			if ($(this).is(':checked')) {
+				$('#cfAR [name="purchase[product_ids][]"][value="'+bumpId+'"]').attr('checked', true);
+			} else {
+				$('#cfAR [name="purchase[product_ids][]"][value="'+bumpId+'"]').attr('checked', false);
+			}
+		});
+		rebuildOrderSummary();
+	});
+	$(document).on('cfpt:cart-updated', function () {
+		rebuildOrderSummary();
+	});
+});
+function rebuildOrderSummary() {
+	var cfpt = window.CFPT || {};
+	var prodPrices = cfpt.prodPrices || {};
+	var freePriceDisplay = cfpt.freePriceDisplay || null;
+	var orderTotalLabel = cfpt.orderTotalLabel || null;
+	var prodSelParent = '[data-de-type="orpo"]';
+	var appendTo = '[data-title="cf-order-summary"] .elOrderProductOptions';
+	var cartMode = ($('.qty_select').length) ? true : false;
+	if ($('.o2step_wrapper').length > 0) {
+		prodSelParent = '.o2step_step2';
+		appendTo = '[data-title="cf-order-summary"]';
+	}
+	$('[data-title="cf-order-summary"]').hide();
+	if ($('[data-title="cf-order-summary"] .qty-head').length == 0 && $('.qty_select').length > 0) {
+		$('[data-title="cf-order-summary"] .elOrderProductOptinLabel .elOrderProductOptinItem').before('<div class="pull-left qty-head">Qty</div>');
+	}
+	var $summTemplate = $("<div/>").addClass("clearfix elOrderProductOptinProducts");
+	$summTemplate.append($("<div/>").addClass("pull-left elOrderProductOptinProductName product-name").css("width","inherit"));
+	$summTemplate.append($("<div/>").addClass("pull-right elOrderProductOptinPrice product-price"));
+	var orderTotal = 0.00;
+	var orderCurrency = "USD"; //default
+	$('[data-title="cf-order-summary"] .elOrderProductOptinProducts').remove();
+	window.cfptCartProds = {};
+	$('#cfAR [name="purchase[product_ids][]"]:checked').each(function () {
+		var prodId = $(this).val();
+		if (window.cfptCartProds.hasOwnProperty(prodId)) {
+			window.cfptCartProds[prodId].qty++;
+		} else {
+			window.cfptCartProds[prodId] = {qty: 1};
+		}
+	});
+	//$('#cfAR [name="purchase[product_ids][]"]:checked').each(function () {
+	$.each(window.cfptCartProds, function (index, value) {
+		var qty = value.qty;
+		var prodId = index;
+		var $prodItem = $(prodSelParent+' [name="'+prodId+'_qty"]');
+		if (!$prodItem.length) {
+			$prodItem = $(prodSelParent+' [name="purchase[product_id]"][value="'+prodId+'"]');
+		}
+		var prodDesc = $prodItem.nextAll('label').html();
+		var prodPriceStr = $prodItem.nextAll('.elOrderProductOptinPrice').html();
+		if (prodPrices.hasOwnProperty(prodId)) {
+			var prodPriceNum = prodPrices[prodId].toFixed(2);
+		} else {
+			var prodPriceNum = parseFloat(prodPriceStr.replace(/[^0-9\.]+/g, "")).toFixed(2);
+		}
+		var subTotal = qty * prodPriceNum;
+		var currency = $prodItem.nextAll('.elOrderProductOptinPrice').attr("taxamo-currency");
+		orderCurrency = currency;
+		$currTemplate = $summTemplate.clone();
+		$currTemplate.attr('data-product_id', prodId);
+		$currTemplate.attr('data-quantity', qty);
+		var prodName = prodDesc;
+		if ($('.qty_select').length > 0) {
+			prodName = '<span class="prodQty">'+qty+'</span>'+prodDesc;
+		}
+		$currTemplate.find('.product-name').html(prodName);
+		if (freePriceDisplay && subTotal == 0) {
+			$currTemplate.find('.product-price').attr("taxamo-currency",currency).html(freePriceDisplay);
+			$currTemplate.attr('data-subtotal', freePriceDisplay);
+		} else {
+			var priceDisplay = subTotal.toLocaleString(undefined, {style: 'currency', currency: currency});
+			$currTemplate.find('.product-price').attr("taxamo-currency",currency).html(priceDisplay);
+			$currTemplate.attr('data-subtotal', priceDisplay);
+		}
+		$currTemplate.appendTo($(appendTo));
+		orderTotal += subTotal;
+	});
+	if (orderTotal) {
+		$ttlTemplate = $summTemplate.clone();
+		$ttlTemplate.addClass('cf-order-total-row').css({'border-top': '1px solid #DDD', 'margin-top': '.5em'});
+		$ttlTemplate.find('.product-name').html(orderTotalLabel);
+		$ttlTemplate.find('.product-price').attr("taxamo-currency",orderCurrency).html(orderTotal.toLocaleString(undefined, {style: 'currency', currency: orderCurrency}));
+		$ttlTemplate.appendTo($(appendTo));
+		$('[data-title="cf-order-summary"]').show();
+		window.cfptOrderTotal = orderTotal;
+	} else {
+		$('[data-title="cf-order-summary"]').hide();
+		window.cfptOrderTotal = null;
+	}
+}
+</script>
+<style>
+/* Custom CSS for CF Pro Tools cf-order-summary script
+ * Copyright 2017 CF Pro Tools, All Rights Reserved
+ * Do not share, or distribute this code without author's consent.
+ * Author: Jaime Smith
+ * Website: https://cfprotools.com
+ */
+.cf-order-total-row {
+	border-top: 1px solid #DDD;
+	margin-top: .5em
+}
+.cf-order-total-row .product-name {
+	font-weight: bold;
+}
+.cf-order-total-row .product-price {
+	font-weight: bold;
+}
+[data-de-type='ors'] .elOrderProductOptinLabel .elOrderProductOptinItem {
+	/* margin-left: 2em; */
+}
+[data-de-type='ors'] .qty-head {
+	width: 3em;
+}
+.prodQty {
+	display: inline-block;
+	width: 3em;
+}
+</style>
