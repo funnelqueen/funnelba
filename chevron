@@ -1,0 +1,25 @@
+<script>
+	/**************************
+	* Copyright 2019 CF Stylebox, All Rights Reserved
+	* Do not share, or distribute this code without author's consent.
+	* This copyright notice must remain in place whenever using
+	* this code - DO NOT REMOVE
+	* Author: Justin Cersey
+	* Website: https://cfStylebox.com
+	**************************/
+	$(function () {
+		//CONFIGURATION
+		var chevronHeight = "100";
+		//END CONFIGURATION
+		$("[data-title='cfs-seperator-chevron']").each(function () {
+			var topSection = $(this);
+			var newID = topSection.attr("id");
+			var bottomSection = topSection.nextAll(".container:visible").first();
+			var bottomSectionColor = bottomSection.css("background-color");
+
+			var divider = "<div id='" + newID + "-chevron'><svg id='cfs-chevronColor' xmlns='http://www.w3.org/2000/svg' version='1.1' width='100%' height='100%' viewBox='0 0 100 100' preserveAspectRatio='none'><path class='bottom' d='M -2 0 L 50 100 L 102 0 L 102 101 L -2 101 Z'></path></svg><style>#" + newID + "-chevron{height:" + chevronHeight + "px}#" + newID + "-chevron #cfs-chevronColor .bottom{fill:" + bottomSectionColor + ";stroke:" + bottomSectionColor + "}</style></div>";
+
+			topSection.append(divider);
+		});
+	});
+</script>
