@@ -1,0 +1,35 @@
+<script type="text/javascript" src="https://cdn.jsdelivr.net/gh/bgrins/TinyColor@1.4.1/dist/tinycolor-min.js"></script>
+<script>
+	/**************************
+	* Copyright 2019 CF Stylebox, All Rights Reserved
+	* Do not share, or distribute this code without author's consent.
+	* This copyright notice must remain in place whenever using
+	* this code - DO NOT REMOVE
+	* Author: Justin Cersey
+	* Website: https://cfStylebox.com
+	**************************/
+	$(function () {
+		//Double Diagonal Section Seperator
+		$("[data-title='cfs-seperator-doublediagonal']").each(function () {
+			var topSection = $(this);
+			var newID = topSection.attr("id");
+			var bottomSection = topSection.nextAll(".container:visible").first();
+			var topSectionColor = topSection.css("background-color");
+			var bottomSectionColor = bottomSection.css("background-color");
+
+			var startingDiagonal1Color = tinycolor(bottomSectionColor);
+
+			if (startingDiagonal1Color.getAlpha() == 0) {
+				startingDiagonal1Color = tinycolor(topSectionColor);
+			}
+
+			var newDiagonal1Color = startingDiagonal1Color.clone();
+
+			newDiagonal1Color.darken(15);
+
+			var divider = "<div id='" + newID + "-doubleDiagonal'><div></div><svg id='cfs-doubleDiagonalColor' xmlns='http://www.w3.org/2000/svg' version='1.1' width='100%' height='100%' viewBox='0 0 100 100' preserveAspectRatio='none'><path class='middle' d='M -1 101 L 101 -1 L 101 25 Z' /><path class='bottom' d='M -1 101 L 101 25 L 101 101 Z'></path></svg><div></div><style>#" + newID + "-doubleDiagonal{height:100px}@media only screen and (max-width:700px) {#" + newID + "-doubleDiagonal{height:50px}}#" + newID + "-doubleDiagonal #cfs-doubleDiagonalColor .middle{fill:" + newDiagonal1Color.toHslString() + ";stroke:" + newDiagonal1Color.toHslString() + "}#" + newID + "-doubleDiagonal #cfs-doubleDiagonalColor .bottom{fill:" + bottomSectionColor + ";stroke:" + bottomSectionColor + "}</style></div>";
+
+			topSection.append(divider);
+		});
+	});
+</script>
