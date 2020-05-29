@@ -1,0 +1,116 @@
+.rbd-core-ui {
+	font-family: 'Montserrat';
+	perspective: 600px;
+}
+
+.rbd-review-slider {
+	min-height: 300px;
+}
+
+.rbd-review-slider .rbd-preloader {
+	width: 36px;
+	height: 36px;
+	margin: 0 auto;
+}
+
+.rbd-review-slider .rbd-review.rbd-prev {
+	-webkit-transform: translate3d(-100px,0,-50px);
+	transform: translate3d(-100px,0,-50px);
+	display: inline-block;
+}
+
+.rbd-review-slider .rbd-review.rbd-next {
+	-webkit-transform: translate3d(100px,0,-50px);
+	transform: translate3d(100px,0,-50px);
+	display: inline-block;
+}
+
+.rbd-review-slider .rbd-review.rbd-curr {
+	z-index: 10;
+	-webkit-transform: translate3d(0,0,0) scale(1);
+	transform: translate3d(0,0,0) scale(1);
+	opacity: 1;
+	display: inline-block;
+}
+
+.rbd-review-slider .rbd-review {
+	padding: 20px 30px;
+	font-size: 1.6rem;
+	line-height: 1.612;
+	border-radius: 4px;
+	box-shadow: 0 10px 30px -8px rgba(0,0,0,.5);
+	display: none;
+	vertical-align: top;
+	-webkit-transition: opacity .35s ease-out, transform .35s ease-out;
+	transition: opacity .35s ease-out, transform .35s ease-out;
+	opacity: 1;
+	position: absolute;
+	left: 0;
+	right: 0;
+	margin: 0 auto;
+	overflow: hidden;
+	opacity: 0;
+	background: #fff;
+	max-width: 600px;
+	-webkit-touch-callout:none;
+	-webkit-user-select:none;
+	-khtml-user-select:none;
+	-moz-user-select:none;
+	-ms-user-select:none;
+	user-select:none;
+	-webkit-tap-highlight-color:rgba(0,0,0,0);
+}
+
+.rbd-review-slider .rbd-review.rbd-first {
+	display: block;
+}
+
+.rbd-review-slider .rbd-heading {
+	margin-top: 0;
+	margin-bottom: 10px;
+	font-size: 2rem;
+	font-weight: 700;
+}
+
+.rbd-review-slider svg {
+	fill: #ffbb58;
+	width: 24px;
+	margin-right: 1px;
+}
+
+.rbd-review-slider .rbd-review-meta {
+	font-size: 1rem;
+	color: #565656;
+	margin-top: 12px;
+	text-align: center;
+}
+
+.rbd-review-slider .rbd-gravatar {
+	border-radius: 100%;
+	width: 100px;
+	height: 100px;
+	float: left;
+	margin-right: 15px;
+	border: 6px solid transparent;
+	box-shadow: 0 3px 12px -2px rgba(0,0,0,.35);
+}
+
+@keyframes round {
+	0% {
+		opacity: 1;
+	}
+
+	100% {
+		opacity: 0;
+	}
+}
+
+@media screen and (max-width: 1024px) {
+	.rbd-review-slider .rbd-review {
+		font-size: 1.4rem;
+	}
+
+	.rbd-review-slider .rbd-review-meta {
+		font-size: 0.8rem;
+	}
+}
