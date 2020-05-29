@@ -1,0 +1,51 @@
+<link href='https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,800' rel='stylesheet' type='text/css'>
+<script>
+	/**************************
+	* Copyright 2019 CF Stylebox, All Rights Reserved
+	* Do not share, or distribute this code without author's consent.
+	* This copyright notice must remain in place whenever using
+	* this code - DO NOT REMOVE
+	* Author: Justin Cersey
+	* Website: https://cfStylebox.com
+	**************************/
+	$(function () {
+  	//Configuration
+	var maximumStars = 5;
+	var showEmptyStars = true;
+	//End of configuration
+
+  	var container = $("<div>", {"class": "containerInner ui-sortable testimonial-container"});
+
+    $('[data-title*="cfpdt-testimonials"] .containerInner').children().each(function () {
+      var reviewElements = $(this).find(".col-inner").children();
+      var headline = $.trim(reviewElements.eq(0).text());
+      var review = $.trim(reviewElements.eq(1).text());
+      var reviewer = $.trim(reviewElements.eq(2).text());
+	  var location = $.trim(reviewElements.eq(3).text());
+      var rating = $.trim(reviewElements.eq(4).text());
+	  var star = "<i class='fa fa-star'></i>";
+	  var emptyStar = "<i class='fa fa-star-o'></i>";
+	  var stars = "";
+	  var numberOfStars = parseInt(rating);
+
+	  if(Number.isInteger(numberOfStars)){
+		for(i = 0; i < numberOfStars; i++){
+			stars += star;
+		}
+
+		if(showEmptyStars && numberOfStars < maximumStars){
+			for(i = 0; i < maximumStars - numberOfStars; i++){
+				stars += emptyStar;
+			}
+		}
+	  }
+
+      var newHTML = "<div class='testimonial-wrap'><div class='testimonial'><strong>\"" + headline + "\"</strong><p>\"" + review + "\"</p></div><cite class='testimonial-author'><span class='name'><strong>" + reviewer + "</strong>" + location + "</span><span class='stars'>" + stars + "</span></cite></div>";
+
+      container.append($(newHTML));
+
+	});
+  
+  $('[data-title*="cfpdt-testimonials"] .containerInner').replaceWith(container);
+});
+</script>
