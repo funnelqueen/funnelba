@@ -1,0 +1,13 @@
+/* Chevron */
+
+svg#cfs-chevronColor {
+	pointer-events: none;
+}
+
+#cfs-chevronColor path {
+	stroke-width: 1;
+}
+
+[data-title='cfs-seperator-chevron'] {
+	padding-bottom: 0px !important;
+}
