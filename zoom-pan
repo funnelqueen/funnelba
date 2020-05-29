@@ -1,0 +1,60 @@
+<script>
+	/**************************
+	* Copyright 2019 CF Stylebox, All Rights Reserved
+	* Do not share, or distribute this code without author's consent.
+	* This copyright notice must remain in place whenever using
+	* this code - DO NOT REMOVE
+	* Author: Justin Cersey
+	* Website: https://cfStylebox.com
+	**************************/
+	$(function () {
+  		//Configuration
+		var zoomScale = 2.5;
+		var mobilePreventScrollOnZoom = true;
+		//End of configuration
+
+		$('[data-title="cfpdt-zoom"]>img').each(function () {
+			var newHTML = "<div class='cfpdt-tile " + this.className + "' style='width:" + $(this).width() + "px;height:" + $(this).height() + "px'><div class='cfpdt-photo' style='background-image:url(\"" + $(this).attr('src') + "\");'></div></div>";
+			$(this).replaceWith($(newHTML));
+		});
+
+		var isTouchDevice = ("ontouchstart" in document.documentElement);
+
+		if(isTouchDevice){
+			$('.cfpdt-tile')
+				// tile touch actions
+				.on({
+					'touchstart': function (e) {
+						var touch = e.originalEvent.changedTouches[0];
+						$(this).children('.cfpdt-photo').css({ 'transform': 'scale(' + zoomScale + ')' }).css({ 'transform-origin': ((touch.pageX - $(this).offset().left) / $(this).width()) * 100 + '% ' + ((touch.pageY - $(this).offset().top) / $(this).height()) * 100 + '%' });
+					}
+				})
+				.on({
+					'touchend': function() {
+						$(this).children('.cfpdt-photo').css({ 'transform': 'scale(1)' });
+					}
+				})
+				.on({
+					'touchmove': function(e) {
+						var touch = e.originalEvent.changedTouches[0];
+						$(this).children('.cfpdt-photo').css({ 'transform-origin': ((touch.pageX - $(this).offset().left) / $(this).width()) * 100 + '% ' + ((touch.pageY - $(this).offset().top) / $(this).height()) * 100 + '%' });
+						if (mobilePreventScrollOnZoom) {
+							e.preventDefault();
+						}
+					}
+				});
+		}else{
+			$('.cfpdt-tile')
+				// tile mouse actions
+				.on('mouseover', function () {
+					$(this).children('.cfpdt-photo').css({ 'transform': 'scale(' + zoomScale + ')' });
+				})
+				.on('mouseout', function () {
+					$(this).children('.cfpdt-photo').css({ 'transform': 'scale(1)' });
+				})
+				.on('mousemove', function (e) {
+					$(this).children('.cfpdt-photo').css({ 'transform-origin': ((e.pageX - $(this).offset().left) / $(this).width()) * 100 + '% ' + ((e.pageY - $(this).offset().top) / $(this).height()) * 100 + '%' });
+				});
+		}
+	});
+</script>
