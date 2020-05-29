@@ -1,0 +1,251 @@
+@import url(https://fonts.googleapis.com/css?family=Lato:700);
+
+.box {
+	position: relative;
+	width: 100%;
+	background-color: #fff;
+	box-shadow: 0 0 15px rgba(0,0,0,.1);
+	padding: 20px;
+}
+
+/* common */
+.ribbon {
+	width: 150px;
+	height: 150px;
+	overflow: hidden;
+	position: absolute;
+}
+
+.ribbon::before,
+.ribbon::after {
+	position: absolute;
+	z-index: -1;
+	content: '';
+	display: block;
+	border: 5px solid #2980b9;
+}
+
+.ribbon span {
+	position: absolute;
+	display: block;
+	width: 225px;
+	padding: 15px 0;
+	background-color: #3498db;
+	box-shadow: 0 5px 10px rgba(0,0,0,.1);
+	color: #fff;
+	font: 700 18px/1 'Lato', sans-serif;
+	text-shadow: 0 1px 1px rgba(0,0,0,.2);
+	text-transform: uppercase;
+	text-align: center;
+	z-index: 4;
+}
+
+.ribbon.white::before,
+.ribbon.white::after{
+	border-color: hsl(0, 0%, 88%);
+}
+
+.ribbon.white span{
+	background-color:hsl(0, 0%, 94%);
+}
+
+.ribbon.white span a{
+	color: hsl(0, 0%, 33%);
+}
+
+.ribbon.black::before,
+.ribbon.black::after {
+	border-color: hsl(0, 0%, 14%);
+}
+
+.ribbon.black span{
+	background-color: hsl(0, 0%, 20%);
+}
+
+.ribbon.gray::before,
+.ribbon.gray::after {
+	border-color: hsl(0, 0%, 54%);
+}
+
+.ribbon.gray span {
+	background-color: hsl(0, 0%, 60%);
+}
+
+.ribbon.blue::before,
+.ribbon.blue::after {
+	border-color: hsl(204, 64%, 44%);
+}
+
+.ribbon.blue span {
+	background-color: hsl(204, 70%, 53%);
+}
+
+.ribbon.green::before,
+.ribbon.green::after {
+	border-color: hsl(150, 65%, 47%);
+}
+
+.ribbon.green span {
+	background-color: hsl(150, 71%, 41%);
+}
+
+.ribbon.turquoise::before,
+.ribbon.turquoise::after {
+	border-color: hsl(168, 77%, 36%);
+}
+
+.ribbon.turquoise span {
+	background-color: hsl(168, 83%, 40%);
+}
+
+.ribbon.purple::before,
+.ribbon.purple::after {
+	border-color: hsl(280, 37%, 47%);
+}
+
+.ribbon.purple span {
+	background-color: hsl(280, 43%, 53%);
+}
+
+.ribbon.red::before,
+.ribbon.red::after {
+	border-color: hsl(5, 79%, 51%);
+}
+
+.ribbon.red span {
+	background-color: hsl(5, 85%, 57%);
+}
+
+.ribbon.orange::before,
+.ribbon.orange::after {
+	border-color: hsl(30, 80%, 47%);
+}
+
+.ribbon.orange span {
+	background-color: hsl(30, 86%, 53%);
+}
+
+.ribbon.yellow::before,
+.ribbon.yellow::after {
+	border-color: hsl(51, 94%, 41%);
+}
+
+.ribbon.yellow span {
+	background-color: hsl(51, 100%, 47%);
+}
+
+.ribbon span a {
+	color: #fff;
+}
+
+/* top left*/
+.ribbon-top-left {
+	top: -10px;
+	left: -10px;
+}
+
+.ribbon-top-left::before,
+.ribbon-top-left::after {
+	border-top-color: transparent;
+	border-left-color: transparent;
+}
+
+.ribbon-top-left::before {
+	top: 0;
+	right: 0;
+}
+
+.ribbon-top-left::after {
+	bottom: 0;
+	left: 0;
+}
+
+.ribbon-top-left span {
+	right: -25px;
+	top: 30px;
+	transform: rotate(-45deg);
+}
+
+/* top right*/
+.ribbon-top-right {
+	top: -10px;
+	right: -10px;
+}
+
+.ribbon-top-right::before,
+.ribbon-top-right::after {
+	border-top-color: transparent;
+	border-right-color: transparent;
+}
+
+.ribbon-top-right::before {
+	top: 0;
+	left: 0;
+}
+
+.ribbon-top-right::after {
+	bottom: 0;
+	right: 0;
+}
+
+.ribbon-top-right span {
+	left: -25px;
+	top: 30px;
+	transform: rotate(45deg);
+}
+
+/* bottom left*/
+.ribbon-bottom-left {
+	bottom: -10px;
+	left: -10px;
+}
+
+.ribbon-bottom-left::before,
+.ribbon-bottom-left::after {
+	border-bottom-color: transparent;
+	border-left-color: transparent;
+}
+
+.ribbon-bottom-left::before {
+	bottom: 0;
+	right: 0;
+}
+
+.ribbon-bottom-left::after {
+	top: 0;
+	left: 0;
+}
+
+.ribbon-bottom-left span {
+	right: -25px;
+	bottom: 30px;
+	transform: rotate(45deg);
+}
+
+/* bottom right*/
+.ribbon-bottom-right {
+	bottom: -10px;
+	right: -10px;
+}
+
+.ribbon-bottom-right::before,
+.ribbon-bottom-right::after {
+	border-bottom-color: transparent;
+	border-right-color: transparent;
+}
+
+.ribbon-bottom-right::before {
+	bottom: 0;
+	left: 0;
+}
+
+.ribbon-bottom-right::after {
+	top: 0;
+	right: 0;
+}
+
+.ribbon-bottom-right span {
+	left: -25px;
+	bottom: 30px;
+	transform: rotate(-45deg);
+}
