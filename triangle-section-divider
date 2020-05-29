@@ -1,0 +1,26 @@
+<script>
+	/**************************
+	* Copyright 2019 CF Stylebox, All Rights Reserved
+	* Do not share, or distribute this code without author's consent.
+	* This copyright notice must remain in place whenever using
+	* this code - DO NOT REMOVE
+	* Author: Justin Cersey
+	* Website: https://cfStylebox.com
+	**************************/
+	$(function () {
+		//CONFIGURATION
+		var triangleHeight = "50";
+		//END CONFIGURATION
+		$("[data-title='cfs-seperator-triangle']").each(function () {
+			var topSection = $(this);
+			var newID = topSection.attr("id");
+			var bottomSection = topSection.nextAll(".container:visible").first();
+
+			var bottomSectionColor = bottomSection.css("background-color");
+
+			var divider = "<div id='" + newID + "-triangle'><div></div><svg id='cfs-triangleColor' xmlns='http://www.w3.org/2000/svg' version='1.1' width='100px' height='100%' viewBox='0 0 100 100' preserveAspectRatio='none'><path class='bottom' d='M -2 0 L 10 0 L 50 100 L 90 0 L 102 0 L 102 101 L -2 101 Z'></path></svg><div></div><style>#" + newID + "-triangle{height:" + triangleHeight + "px;display:flex}#" + newID + "-triangle > div{flex:1;background-color:" + bottomSectionColor + "}#" + newID + "-triangle #cfs-triangleColor .bottom{fill:" + bottomSectionColor + ";stroke:" + bottomSectionColor + "}</style></div>";
+
+			topSection.append(divider);
+		});
+	});
+</script>
