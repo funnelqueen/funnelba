@@ -1,0 +1,13 @@
+/* Double Diagonal Line Seperator */
+
+svg#cfs-doubleDiagonalColor {
+	pointer-events: none;
+}
+
+#cfs-doubleDiagonalColor path {
+	stroke-width: 1;
+}
+
+[data-title='cfs-seperator-doublediagonal'] {
+	padding-bottom: 0px !important;
+}
