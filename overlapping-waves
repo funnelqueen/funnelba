@@ -1,0 +1,51 @@
+<script>
+	/**************************
+	* Copyright 2019 CF Stylebox, All Rights Reserved
+	* Do not share, or distribute this code without author's consent.
+	* This copyright notice must remain in place whenever using
+	* this code - DO NOT REMOVE
+	* Author: Justin Cersey
+	* Website: https://cfStylebox.com
+	**************************/
+	$(function () {
+		//Opverlapping Waves Section Divider
+		$("[data-title='cfs-overlappingwaves']").each(function () {
+			var topSection = $(this);
+			var newID = topSection.attr("id");
+			var hideOnType = topSection.attr("data-hide-on");
+			var bottomSection = "";
+
+			if (hideOnType == "mobile") {
+				bottomSection = topSection.nextAll(".container:not([data-hide-on='desktop'])").first();
+			} else if (hideOnType == "desktop") {
+				bottomSection = topSection.nextAll(".container:not([data-hide-on='mobile'])").first();
+			} else {
+				bottomSection = topSection.nextAll(".container:visible").first();
+			}
+
+			var topSectionColor = topSection.css("background-color");
+			var bottomSectionColor = bottomSection.css("background-color");
+
+			var topSectionClasses = topSection.attr("class");
+			var sectionWidthClassName = "fullContainer";
+
+			if (topSectionClasses.indexOf("midWideContainer") != -1) {
+				sectionWidthClassName = "midWideContainer";
+			} else if (topSectionClasses.indexOf("wideContainer") != -1) {
+				sectionWidthClassName = "wideContainer";
+			} else if (topSectionClasses.indexOf("midContainer") != -1) {
+				sectionWidthClassName = "midContainer";
+			} else if (topSectionClasses.indexOf("smallContainer") != -1) {
+				sectionWidthClassName = "smallContainer";
+			}
+
+			if (hideOnType != undefined) {
+				hideOnType = "data-hide-on='" + hideOnType + "'";
+			}
+			
+			var divider = "<div id='" + newID + "-divider' class='container padding40H cfs-overlappingwaves " + sectionWidthClassName + "' " + hideOnType + " style='background-image:linear-gradient(transparent calc(100% - 1px), " + bottomSectionColor + " calc(100% - 1px));'><svg xmlns='http://www.w3.org/2000/svg' width='100%' height='100%' viewBox='0 0 100 50' preserveAspectRatio='none'><path style='fill:" + bottomSectionColor + ";fill-opacity:0.4;' d='M 18.40625,1.2285156 C 13.074448,1.3486099 7.03125,3.359375 0,8 l 0,6 C 25,-6.5 37.5,8.75 50,25 41.015625,12.960938 32.031967,0.92160797 18.40625,1.2285156 Z' id='pathTop' /><path style='fill:" + bottomSectionColor + ";fill-opacity:0.16;' d='m 50,25 c 12.5,16.25 25,33.5 50,17 l 0,-6 C 75,53 62.5,39 50,25 Z' id='pathBottom' /><path style='fill:" + bottomSectionColor + ";fill-opacity:1;' d='M 100,42 C 50,75 50,-27 0,14 l 0,36 100,0 z' id='pathMiddle' /></svg></div>";
+			
+			topSection.append(divider);
+		});
+	});
+</script>
