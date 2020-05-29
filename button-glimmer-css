@@ -1,0 +1,38 @@
+/* Button Glimmer */
+.cfs-btn-glimmer {
+	position: relative;
+	overflow: hidden;
+}
+
+.cfs-btn-glimmer:after {
+	display: none;
+	content: ' ';
+	position: absolute;
+	top: -50%;
+	right: -60%;
+	bottom: -50%;
+	left: -60%;
+	background: linear-gradient(50deg, rgba(255, 255, 255, 0) 40%, rgba(255, 255, 255, 0.5) 50%, rgba(255, 255, 255, 0) 60%);
+	-webkit-transform: translate(-80%, 0px);
+	-ms-transform: translate(-80%, 0px);
+	transform: translate(-80%, 0px);
+}
+
+.cfs-btn-glimmer--loop:after {
+	display: block;
+	animation: 5s cfs-glimmer infinite;
+}
+
+@keyframes cfs-glimmer {
+	0% {
+		-webkit-transform: translate(-80%, 0px);
+		-ms-transform: translate(-80%, 0px);
+		transform: translate(-80%, 0px);
+	}
+
+	50% {
+		-webkit-transform: translate(80%, 0px);
+		-ms-transform: translate(80%, 0px);
+		transform: translate(80%, 0px);
+	}
+}
