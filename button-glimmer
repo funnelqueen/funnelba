@@ -1,0 +1,21 @@
+<script>
+	/**************************
+	* Copyright 2019 CF Stylebox, All Rights Reserved
+	* Do not share, or distribute this code without author's consent.
+	* This copyright notice must remain in place whenever using
+	* this code - DO NOT REMOVE
+	* Author: Justin Cersey
+	* Website: https://cfStylebox.com
+	**************************/
+	$(function () {
+		var buttons = $("[data-title='cfs-button-glimmer'] .elButton");
+
+		if (buttons.length === 0) {
+			buttons = $(".elButton");
+		}
+
+		buttons.each(function () {
+			$(this).addClass("cfs-btn-glimmer cfs-btn-glimmer--loop");
+		});
+	});
+</script>
