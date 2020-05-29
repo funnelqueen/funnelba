@@ -1,0 +1,41 @@
+<script>
+	/**************************
+	* Copyright 2019 CF Stylebox, All Rights Reserved
+	* Do not share, or distribute this code without author's consent.
+	* This copyright notice must remain in place whenever using
+	* this code - DO NOT REMOVE
+	* Author: Justin Cersey
+	* Website: https://cfStylebox.com
+	**************************/
+	$(function () {
+		//CONFIGURATION
+		var topColorPercent = 35;
+		var bottomColorPercent = 100;
+		var topColor = "";
+		var bottomColor = "";
+		//END CONFIGURATION
+		$("[data-title='cfs-text-gradient'] .elHeadline").each(function () {
+			var headline = $(this);
+			var boldTags = headline.find("b");
+			var topTextColor = (topColor != "") ? topColor : boldTags.first().css("color");
+			var bottomTextColor = (bottomColor != "") ? bottomColor : headline.css("color");
+			var parentId = headline.parent().attr("id");
+			var boldStyle = "<style>#" + parentId + " .elHeadline span{background:linear-gradient(" + topTextColor + " " + topColorPercent + "%, " + bottomTextColor + " " + bottomColorPercent + "%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;}</style>";
+
+			$("head").append(boldStyle);
+
+			boldTags.each(function () {
+				var boldTag = $(this);
+				var currentHtml = boldTag.html();
+				var currentText = boldTag.text();
+				var newHtml = "";
+
+				$.each(currentText.split(' '), function (i, text) {
+					newHtml += "<span>" + text + " </span>";	
+				});
+
+				boldTag.html(currentHtml.replace(currentText, newHtml));
+			});
+		});
+	});
+</script>
