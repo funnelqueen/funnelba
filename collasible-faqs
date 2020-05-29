@@ -1,0 +1,66 @@
+<script>
+	/**************************
+	* Copyright 2019 CF Stylebox, All Rights Reserved
+	* Do not share, or distribute this code without author's consent.
+	* This copyright notice must remain in place whenever using
+	* this code - DO NOT REMOVE
+	* Author: Justin Cersey
+	* Website: https://cfStylebox.com
+	**************************/
+	$(function () {
+		//CONFIGURATION
+		var backgroundColor = "";
+		var accentColor = "";
+		//END CONFIGURATION
+		$("[data-title*='cfs-faq-collapsible-q']").each(function () {
+			var question = $(this);
+			var questionDataTitleParts = question.attr("data-title").split("-");
+			var answer = $("[data-title^='" + questionDataTitleParts[0] + "-cfs-faq-collapsible-a']");
+			var answerInner = answer.find(".elHeadline");
+			var container = $("<div class='cfs-faq-container'></div>");
+			var toggle = question.find("i");
+
+			if (backgroundColor != "") {
+				container.css("background-color", backgroundColor);
+			}
+
+			if (accentColor != "") {
+				container.css("border-left-color", accentColor);
+			}
+
+			answerInner.wrapInner("<div></div>");
+
+			if (toggle.size() == 1) {
+				var toggleClone = toggle.clone();
+
+				toggle.wrap("<span></span>");
+				toggleClone.addClass("cfs-faq-spacer").css("font-size", toggle.css("font-size"));
+				answerInner.prepend(toggleClone);
+				toggleClone.wrap("<div></div>").wrap("<span></span>");
+				toggle.addClass("cfs-faq-toggle");
+
+				if (accentColor != "") {
+					toggle.css("color", accentColor);
+				}
+			}
+
+			question.find(".elHeadline").css("display", "flex");
+			question.addClass("cfs-faq-question");
+			answerInner.css("display", "flex");
+			answer.addClass("cfs-faq-answer");
+			question.before(container);
+			question.appendTo(container);
+			answer.appendTo(container);
+
+			container.click(function () {
+				answer.slideToggle(200);
+
+				if (toggle.hasClass('cfs-faq-toggle-open')) {
+					toggle.removeClass('cfs-faq-toggle-open');
+				} else {
+					toggle.addClass('cfs-faq-toggle-open');
+				}
+			});
+		});
+	});
+</script>
