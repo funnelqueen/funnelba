@@ -1,0 +1,56 @@
+<script src="https://cdn.jsdelivr.net/gh/CFStylebox/Assets@master/svg/brushstroke.js"></script>
+<script>
+	/**************************
+	* Copyright 2019 CF Stylebox, All Rights Reserved
+	* Do not share, or distribute this code without author's consent.
+	* This copyright notice must remain in place whenever using
+	* this code - DO NOT REMOVE
+	* Author: Justin Cersey
+	* Website: https://cfStylebox.com
+	**************************/
+	$(function () {
+		//CONFIGURATION
+		var textColorOverride = "";
+		var brushstrokeColorOverride = "";
+		//END CONFIGURATION
+		$("[data-title='cfs-brushstroke-underlay'] .elHeadline b").each(function () {
+			var boldTag = $(this);
+			var brushstrokeColor = (brushstrokeColorOverride == "") ? boldTag.css("color") : brushstrokeColorOverride;
+			var textColor = (textColorOverride == "") ? getColor(boldTag, "background-color") : textColorOverride;
+
+			boldTag.parent().css("z-index", "2");
+			boldTag.css({"position": "relative", "z-index": "1", "color": textColor});
+			boldTag.wrap("<div style='display:inline-block;position:relative;z-index:-1;'></div>");
+
+			var svg = "<svg xmlns='http://www.w3.org/2000/svg' style='left: -20%; top: -10%; position: absolute;' viewBox='0 0 100 27' preserveAspectRatio='none meet' width='130%' height='120%' version='1.1'><path style='fill: " + brushstrokeColor + ";' d='" + cfsBrushstrokeSvgCoordinates + "' /></svg>";
+
+			boldTag.after(svg);
+		});
+	});
+
+	function getColor(element, colorProperty) {
+		var color = element.css(colorProperty);
+
+		if (IsTransparent(color)) {
+			element.parents().each(function (i) {
+				color = $(this).css('background-color');
+
+				return IsTransparent(color);
+			});
+		}
+
+		return color;
+	}
+
+	function IsTransparent(color) {
+		// Chrome & Opera
+		if (color.indexOf('rgba(0, 0, 0, 0)') != -1
+			// Firefox & Internet Explorer
+			|| color.indexOf('transparent') != -1) {
+
+			return true;
+		} else {
+			return false;
+		}
+	}
+</script>
