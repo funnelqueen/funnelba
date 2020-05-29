@@ -1,0 +1,138 @@
+<link href='https://fonts.googleapis.com/css?family=Montserrat:400,400i,700&ver=4.9.5' rel='stylesheet' type='text/css'>
+<script>
+	/**************************
+	* Copyright 2019 CF Stylebox, All Rights Reserved
+	* Do not share, or distribute this code without author's consent.
+	* This copyright notice must remain in place whenever using
+	* this code - DO NOT REMOVE
+	* Author: Justin Cersey
+	* Website: https://cfStylebox.com
+	**************************/
+
+let options = {
+	'speed': 3000, //in milliseconds
+	'pause': true,
+}
+
+window.addEventListener('DOMContentLoaded', function () {
+	/**************************************************/
+
+		var container = $("<div>", {"class": "containerInner ui-sortable rbd-core-ui"});
+		var sliderContainer = $("<div>", {"class": "rbd-review-slider"});
+		var reviewContainer = $("<div>", {"class": "rbd-review-container"});
+
+		var reviewCounter = 0;
+
+		$('[data-title*="cfpdt-reviews"] .containerInner').children().each(function () {
+		  var reviewElements = $(this).find(".col-inner").children();
+		  var headline = $.trim(reviewElements.eq(0).text());
+		  var rating = $.trim(reviewElements.eq(1).text());
+		  var review = $.trim(reviewElements.eq(2).text());
+		  var reviewer = $.trim(reviewElements.eq(3).text());
+		  var gravitar = reviewElements.eq(4).find("img").attr('src');
+		  var numberOfStars = parseInt(rating);
+
+		  if(!Number.isInteger(numberOfStars)){
+			numberOfStars = 0;
+		  }
+
+		  var reviewClassName = "";
+
+		  if(reviewCounter == 0){
+			reviewClassName = "rbd-curr";
+		  }else if(reviewCounter == 1){
+			reviewClassName = "rbd-next";
+		  }
+
+		  var gravitarHTML = "";
+
+		  if(gravitar != undefined){
+			gravitarHTML = "<img class='rbd-gravatar' src='" + gravitar + "'>";
+		  }
+
+		  var newHTML = "<div class='rbd-review " + reviewClassName + "'><h3 class='rbd-heading'>" + headline + "</h3><i class='renderSVG' data-icon='star' data-repeat='" + numberOfStars + "'></i><div class='rbd-content'>" + gravitarHTML + review + "</div><div class='rbd-review-meta'>" + reviewer + "</div></div>";
+
+		  reviewContainer.append($(newHTML));
+		  reviewCounter++;
+		});
+
+	  sliderContainer.append(reviewContainer);
+	  container.append(sliderContainer);	
+
+	  $('[data-title*="cfpdt-reviews"] .containerInner').replaceWith(container);
+
+	/**************************************************/
+
+	let slider = document.querySelector('.rbd-review-slider');
+	let slides = slider.querySelectorAll('.rbd-review');
+	let total = slides.length;
+	let pause = false;
+	let isTouchDevice = ("ontouchstart" in document.documentElement);
+
+	if(isTouchDevice){
+		document.addEventListener('touchstart', function (e) {}, false);
+		document.addEventListener('touchend', function (e) {}, false);
+	}
+
+	// Render SVG Icons
+	const rbdIcons = {
+		'star': '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 23 21"><path d="M11.4428797,0.682367821 L13.1475073,5.91258374 C13.3362303,6.49202457 13.8779163,6.88340127 14.4879506,6.88340127 L20.0068228,6.88340127 C20.9667598,6.88340127 21.3666485,8.10734296 20.5893138,8.66950222 L16.1242299,11.9021721 C15.6304898,12.2600022 15.4244247,12.8943375 15.6131477,13.4727617 L17.3177753,18.7029777 C17.6146315,19.6128014 16.5700242,20.3691242 15.7937097,19.8069649 L11.3286258,16.574295 C10.8348856,16.2164649 10.1656841,16.2164649 9.67194396,16.574295 L5.20686008,19.8069649 C4.43054552,20.3691242 3.38491815,19.6128014 3.68177431,18.7029777 L5.38742207,13.4727617 C5.57614506,12.8943375 5.36905984,12.2600022 4.87531969,11.9021721 L0.410235806,8.66950222 C-0.366078756,8.10734296 0.0327898298,6.88340127 0.992726759,6.88340127 L6.51159901,6.88340127 C7.12265344,6.88340127 7.6633193,6.49202457 7.85204228,5.91258374 L9.55769005,0.682367821 C9.85454621,-0.22745594 11.1460235,-0.22745594 11.4428797,0.682367821"></path></svg>'
+	}
+
+	function RBD_renderSVG() {
+		let renderSVG = document.querySelectorAll('.renderSVG');
+
+		for (i = 0, n = renderSVG.length; i < n; ++i) {
+			let el = renderSVG[i],
+				icon = el.getAttribute('data-icon'),
+				repeat = el.getAttribute('data-repeat');
+
+			if (!el.classList.contains('rendered')) {
+				el.innerHTML = repeat != null ? rbdIcons[icon].repeat(repeat) : rbdIcons[icon];
+				el.classList.add('rendered');
+			}
+		}
+	}
+
+	function pauseSlide() {
+		// detect touch
+		if(isTouchDevice){
+			slider.ontouchend = function () {pause = false;};
+			slider.ontouchstart = function () {pause = true;};
+		}else{
+			slider.onmouseleave = function () {pause = false;};
+			slider.onmouseenter = function () {pause = true;};
+		}
+		return pause;
+	}
+
+	function slide() {
+		if (options.pause && pauseSlide()) return;
+
+		let activeSlide = document.querySelector('.rbd-review-slider .rbd-review.rbd-curr');
+		let prev, curr, next, soon;
+
+		curr = activeSlide;
+		prev = activeSlide.previousElementSibling;
+		next = activeSlide.nextElementSibling;
+
+		if (next != null) {
+			soon = next.nextElementSibling == null ? slides[0] : next.nextElementSibling;
+		} else {
+			next = slides[0];
+			soon = slides[1];
+		}
+
+		if (prev != null) prev.classList.remove('rbd-prev', 'rbd-curr', 'rbd-next');
+		if (curr != null) curr.classList.remove('rbd-prev', 'rbd-curr', 'rbd-next'); curr.classList.add('rbd-prev');
+		if (next != null) next.classList.remove('rbd-prev', 'rbd-curr', 'rbd-next'); next.classList.add('rbd-curr');
+		if (soon != null) soon.classList.remove('rbd-prev', 'rbd-curr', 'rbd-next'); soon.classList.add('rbd-next');
+	}
+
+	RBD_renderSVG();
+
+	let slideTimer = setInterval(function () {
+		slide();
+	}, options.speed);
+}, true);
+</script>
