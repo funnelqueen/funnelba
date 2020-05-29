@@ -1,0 +1,13 @@
+/* Triangle seperator */
+
+svg#cfs-triangleColor {
+	pointer-events: none;
+}
+
+#cfs-triangleColor path {
+	stroke-width: 1;
+}
+
+[data-title='cfs-seperator-triangle'] {
+	padding-bottom: 0px !important;
+}
