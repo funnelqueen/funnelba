@@ -1,0 +1,48 @@
+<script>
+	/**************************
+	* Copyright 2019 CF Stylebox, All Rights Reserved
+	* Do not share, or distribute this code without author's consent.
+	* This copyright notice must remain in place whenever using
+	* this code - DO NOT REMOVE
+	* Author: Justin Cersey
+	* Website: https://cfStylebox.com
+	**************************/
+	$(function () {
+  		//Configuration
+		var position = "top-right"; //top-left, top-right, bottom-right, bottom-left, all-corners
+		var openPopup = true; //true, false
+		var color = "red"; //white, black, gray, blue, green, turquoise, purple, red, orange, yellow
+		//End of configuration
+
+		var ribbonContainer = $('[data-title*="cfpdt-ribbon-container"]');
+		var ribbonTextElement = $('[data-title*="cfpdt-ribbon-text"]');
+		var ribbonContent = $.trim(ribbonTextElement.text());
+
+		var colorClass = color;
+		var colorStyle = "style='background-color:" + color + "'";
+
+		if(color.indexOf("#") != -1){
+			colorClass = "";
+		}else{
+			colorStyle = "";
+		}
+
+		if(openPopup){
+			ribbonContent = "<a href='#open-popup'>" + ribbonContent + "</a>";
+		}
+
+		var ribbonHTML = "<div class='box'>";
+
+		if(position != "all-corners"){
+			ribbonHTML += "<div class='ribbon ribbon-" + position + " " + color + "'><span>" + ribbonContent + "</span></div>";
+		}else{
+			ribbonHTML += "<div class='ribbon ribbon-top-right " + color + "'><span>" + ribbonContent + "</span></div><div class='ribbon ribbon-top-left " + color + "'><span>" + ribbonContent + "</span></div><div class='ribbon ribbon-bottom-right " + color + "'><span>" + ribbonContent + "</span></div><div class='ribbon ribbon-bottom-left " + color + "'><span>" + ribbonContent + "</span></div>";
+		}
+
+		ribbonHTML += "</div>";
+
+		ribbonContainer.find(".containerInner").prepend($(ribbonHTML));
+		ribbonContainer.find(".row").detach().appendTo(".box");
+		ribbonTextElement.remove();
+	});
+</script >
