@@ -1,0 +1,45 @@
+div.cfpdtOfferStackRow {
+	width: 100%;
+	white-space: nowrap;
+	display: flex;
+	align-items: baseline;
+	margin-bottom: 10px;
+}
+
+div.cfpdtOfferStackRow.wrapText > div:first-of-type {
+	white-space: normal;
+}
+
+div.cfpdtOfferStackRow div.textWrapper{
+	overflow: visible;
+	text-align: left;
+}
+
+div.cfpdtOfferStackRow.wrapText div.textWrapper {
+	overflow: hidden;
+}
+
+
+.cfpdtOfferStackRow span {
+	flex: 1;
+	border-bottom: 2px dotted #394c60;
+	min-width: 20px;
+}
+
+.cfpdtOfferStackRow i.fa{
+	float: left;
+	padding-top: 0.15em;
+	padding-right: 1.5em;
+}
+
+.cfpdtOfferStackRow i.small {
+	font-size: 30%;
+	padding-top: 1.7em;
+	padding-right: 1.7em;
+}
+
+.cfpdtOfferStackRow i.medium {
+	font-size: 60%;
+	padding-top: 0.6em;
+	padding-right: 1.5em;
+}
