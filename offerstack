@@ -1,0 +1,65 @@
+<script>
+	/**************************
+	* Copyright 2019 CF Stylebox, All Rights Reserved
+	* Do not share, or distribute this code without author's consent.
+	* This copyright notice must remain in place whenever using
+	* this code - DO NOT REMOVE
+	* Author: Justin Cersey
+	* Website: https://cfStylebox.com
+	**************************/
+	$(function () {
+		//CONFIGURATION
+		var showBullets = true;
+		var showDottedLines = true;
+		var bulletType = "circle"; //circle, star, check
+		var bulletSize = 1; //1 = small, 2 = medium, 3 = large
+		var dottedLineColor = "";
+		var allowTextWrapping = true;
+		//END CONFIGURATION
+
+		$("[data-title='cfpdt-offer-stack'] .col-inner").each(function(){
+			var container = $(this);
+			var stackTable = "";
+			var stackRowCounter = 0;
+
+			container.children().each(function () {
+				var newRow = stackRowCounter % 2 == 0;
+
+				stackRowCounter++;
+
+				if (newRow) {
+					stackTable += "<div class='cfpdtOfferStackRow" + (allowTextWrapping == true ? " wrapText" : "") + "'>";
+					$(this).children().first().wrapInner("<div class='textWrapper'></div>")
+
+					if (showBullets) {
+						//\r\n is because lines starting with bold text put this in so we need one for lines without bold text too.
+						var bulletSizeClass = bulletSize == 1 ? "small" : bulletSize == 2 ? "medium" : "";
+						$(this).children().first().prepend("<i class='fa fa-fw fa-" + bulletType + " " + bulletSizeClass + "'></i>\r\n");
+					}
+				}
+
+				stackTable += $(this)[0].outerHTML;
+
+				if (newRow) {
+					var dottedLines = "";
+
+					if (!showDottedLines) {
+						dottedLines = " style='border-bottom:none;'";
+					} else {
+						if (dottedLineColor != "") {
+							dottedLines = " style='border-bottom-color:" + dottedLineColor + ";'";
+						}
+					}
+
+					stackTable += "<span" + dottedLines + "></span>";
+				}
+
+				if (!newRow) {
+					stackTable += "</div>";
+				}
+			});
+
+			container.html(stackTable);
+		});
+	});
+</script>
